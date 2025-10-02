@@ -1,0 +1,21 @@
+[package]
+name = "dipt-http"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+quinn = { version = "0.11", features = ["rustls"] }
+quinn-proto = "0.11"
+tokio = { version = "1", features = ["full"] }
+anyhow = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
+rustls = "0.23"   # matches Quinn version requirements
+rcgen = "0.14.5"
+clap = { version = "4", features = ["derive"] }
+chrono = "0.4.41"
+
+tracing-futures = "0.2.5"
+url = "2.5.7"
+directories-next = "2"
+# quinn = { git = "https://github.com/quinn-rs/quinn.git" }
