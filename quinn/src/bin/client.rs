@@ -84,7 +84,7 @@ struct Opt {
     #[clap(long = "repeat")]
     repeat: Option<u32>,
 
-    /// interval in seconds between repeats
+    /// interval in seconds between repeats. default = 1s
     #[clap(long = "repeat-interval")]
     repeat_interval: Option<u64>,
 
@@ -213,7 +213,7 @@ async fn run(options: Opt) -> Result<()> {
     eprintln!("clock: {:?}", Utc::now());
     let mut repeat = 1;
     if let Some(repeating) = options.repeat { repeat = repeating; }
-    let mut repeat_interval = 0;
+    let mut repeat_interval = 1;
     if let Some(repeating_interval) = options.repeat_interval { repeat_interval = repeating_interval; }
 
     let mut ticker = interval(Duration::from_secs(repeat_interval));
