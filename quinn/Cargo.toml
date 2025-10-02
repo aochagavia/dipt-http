@@ -10,8 +10,7 @@ tokio = { version = "1", features = ["full"] }
 anyhow = "1"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
-rustls = { version = "0.23", default-features = false, features = ["r
-ing"] }
+rustls = { version = "0.23", default-features = false, features = ["ring"] }
 rcgen = "0.14.5"
 clap = { version = "4", features = ["derive"] }
 chrono = "0.4.41"
