@@ -225,13 +225,15 @@ async fn run(options: Opt) -> Result<()> {
         let endpoint = endpoint.clone();
         let rebind = rebind;
 
-        tokio::spawn(async move {
+        //tokio::spawn(async move {
             eprintln!(" sending request #{} to remote at: {:?}", n, Utc::now());
             if let Err(e) = perform_request(conn, request, endpoint, rebind, n).await {
-                eprintln!("Request failed: {:?}", e);
+                    eprintln!("Request failed: {:?}", e);
             }
-        });
-        ticker.tick().await;
+        //});
+        if repeat > 1 {
+            ticker.tick().await;
+        }
     }
 
     conn.close(0u32.into(), b"done");
@@ -242,7 +244,7 @@ async fn run(options: Opt) -> Result<()> {
     Ok(())
 }
 async fn perform_request(conn: Arc<Connection>, request: Arc<String>,
-                              endpoint: Arc<Endpoint>, rebind: bool, n: u32) -> Result<()> {
+                         endpoint: Arc<Endpoint>, rebind: bool, n: u32) -> Result<()> {
     let (mut send, mut recv) = conn
         .open_bi()
         .await
