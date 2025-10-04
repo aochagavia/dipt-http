@@ -200,7 +200,7 @@ async fn run(options: Opt) -> Result<()> {
     let rebind = options.rebind;
     let host = options.host.as_deref().unwrap_or(url_host);
 
-    eprintln!("connecting to {host} at {remote}");
+    info!("connecting to {host} at {remote}");
     let conn = endpoint
         .connect(remote, host)?
         .await
@@ -209,8 +209,8 @@ async fn run(options: Opt) -> Result<()> {
     let request = Arc::new(request);
     let endpoint = Arc::new(endpoint);
 
-    eprintln!("connected at {:?}", start.elapsed());
-    eprintln!("clock: {:?}", Utc::now());
+    info!("connected at {:?}", start.elapsed());
+    info!("clock: {:?}", Utc::now());
     let mut repeat = 1;
     if let Some(repeating) = options.repeat { repeat = repeating; }
     let mut repeat_interval = 1;
@@ -226,9 +226,9 @@ async fn run(options: Opt) -> Result<()> {
         let rebind = rebind;
 
         //tokio::spawn(async move {
-            eprintln!(" sending request #{} to remote at: {:?}", n, Utc::now());
+            info!(" sending request #{} to remote at: {:?}", n, Utc::now());
             if let Err(e) = perform_request(conn, request, endpoint, rebind, n).await {
-                    eprintln!("Request failed: {:?}", e);
+                    info!("Request failed: {:?}", e);
             }
         //});
         if repeat > 1 {
@@ -237,8 +237,8 @@ async fn run(options: Opt) -> Result<()> {
     }
 
     conn.close(0u32.into(), b"done");
-    eprintln!("total time from start to after close: {:?}", start.elapsed());
-    eprintln!("clock: {:?}", Utc::now());
+    info!("total time from start to after close: {:?}", start.elapsed());
+    info!("clock: {:?}", Utc::now());
     // Give the server a fair chance to receive the close packet
     //endpoint.wait_idle().await;
     Ok(())
@@ -252,12 +252,12 @@ async fn perform_request(conn: Arc<Connection>, request: Arc<String>,
     if rebind {
         let socket = std::net::UdpSocket::bind("[::]:0").unwrap();
         let addr = socket.local_addr().unwrap();
-        eprintln!("rebinding to {addr}");
+        info!("rebinding to {addr}");
         endpoint.rebind(socket).expect("rebind failed");
     }
 
     let start = Instant::now();
-    eprintln!("request #{}: sending at {:?}", n, Utc::now());
+    info!("request #{}: sending at {:?}", n, Utc::now());
 
     send.write_all(request.as_bytes())
         .await
@@ -266,7 +266,7 @@ async fn perform_request(conn: Arc<Connection>, request: Arc<String>,
     send.finish()
         .map_err(|e| anyhow!("failed to finish stream of request #{}: {}", n, e))?;
 
-    eprintln!("request #{} sent at {:?}", n, Utc::now());
+    info!("request #{} sent at {:?}", n, Utc::now());
 
     let resp = recv
         .read_to_end(usize::MAX)
@@ -274,15 +274,15 @@ async fn perform_request(conn: Arc<Connection>, request: Arc<String>,
         .map_err(|e| anyhow!("failed to read response: {}", e))?;
 
     let duration = start.elapsed();
-    eprintln!(
+    info!(
         "request #{}: response received in {:?} from request start",
         n,
         duration
     );
     io::stdout().write_all(&resp)?;
     io::stdout().flush()?;
-    eprintln!("request #{}: duration: {:?}", n, duration);
-    eprintln!("request #{}: clock: {:?}", n, Utc::now());
+    info!("request #{}: duration: {:?}", n, duration);
+    info!("request #{}: clock: {:?}", n, Utc::now());
     Ok(())
 }
 
