@@ -28,7 +28,7 @@ cargo run --release --bin client -- \
 ```
 - `no-verify` is to not verify the server certificate, useful when the server is using a self-signed certificate
 - `maxrtt` sets the initial-rtt and idle-timeout to the proper value
-- replace `URL` by the URL of the quic server
+- replace `URL` by the URL of the quic server (ex: `https://127.0.0.1:4433`)
  
 # Quinn as HTTP Server over QUIC
 The following example is for a max rtt of 3600 seconds (1h).
