@@ -2,8 +2,8 @@
 
 # Installation
 - [install Rust](https://rustup.rs/)
-- git clone https://github.com/deepspaceip/dipt-http
-- cd dipt-http
+- `git clone https://github.com/deepspaceip/dipt-http`
+- `cd dipt-http`
 
 # Key Considerations
 For deep space simulation, with long delays and intermittence, the QUIC stacks default configuration is not suitable. Therefore, the connection must be configured accordingly. 
@@ -14,34 +14,38 @@ The cloned repo contains a modified version of the Quinn example http client and
 
 The relevant options to set the proper transport configuration are:
 
-- initial-rtt (unit: ms)
-- idle-timeout (unit: ms)
-- cc-algorithm congestion\_window\_unchecked
+- `initial-rtt` (unit: ms)
+- `idle-timeout` (unit: ms)
+- `cc noop`
 
-We found that for interoperability with the Quinn stack, the following parameters were required for the Quiche client:
-"--wire-version 1 --http-version 'HTTP/0.9' --dgram-proto none"
 
 # Quinn as HTTP Client over QUIC
 The following example is for a max rtt is 3600 seconds (1h) and a Quinn server with a self-signed certificate
 
-- cargo run --release --bin client -- --no-verify --maxrtt 3600000 --cc noop URL
-  - no-verify is to not verify the server certificate, useful when the server is using a self-signed certificate
-  - maxrtt sets the initial-rtt and idle-timeout to the proper value
-  - replace URL by the URL of the quic server
+```bash
+cargo run --release --bin client -- \
+--no-verify --maxrtt 3600000 --cc noop URL
+```
+- `no-verify` is to not verify the server certificate, useful when the server is using a self-signed certificate
+- `maxrtt` sets the initial-rtt and idle-timeout to the proper value
+- replace `URL` by the URL of the quic server
  
 # Quinn as HTTP Server over QUIC
 The following example is for a max rtt of 3600 seconds (1h).
 
-- cargo run --release --bin server -- --maxrtt 3600000 DIR
-  - replace DIR by the directory where html pages are located
-  - use --listen to specify address and port to bind the server to. For example: --listen 0.0.0.0:4433
-  - use --alpn hq-interop if the client is Quiche
+```bash
+cargo run --release --bin server -- \
+--maxrtt 3600000 --listen 0.0.0.0:4433 DIR
+```
+- replace `DIR` by the directory where html pages are located
+- use `--listen` to specify address and port to bind the server to.
+- use `--alpn hq-interop` if the client is Quiche
 
 # Get help
 
 ## Arguments
-- cargo run --release --bin client -- --help
-- cargo run --release --bin server -- --help
+- `cargo run --release --bin client -- --help`
+- `cargo run --release --bin server -- --help`
 
 ## On execution
-- add RUST_LOG=info in front of the cargo command to get more details on the console
+- add `RUST_LOG=info` in front of the cargo command to get more details on the console
