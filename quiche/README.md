@@ -3,7 +3,7 @@
 # Installation
 - [install Rust](https://rustup.rs/)
 - `git clone https://github.com/deepspaceip/quiche`
- - Contrary to the Quinn QUIC stack where one can add a congestion controller outside of the source repo, it is not possible to do so with Quiche. Therefore, a noop congestion controller has been added to our [fork](https://github.com/deepspaceip/quiche). Note that there is a [PR against Quiche for a noop congestion controller](https://github.com/cloudflare/quiche/pull/2102/files/74b999eb1f3972b9e589e9c5a0a07c74ef854386..799f25e6a0e4720c9b6ba7b1766dea10dd3dfe5d) but it has not been merged yet.
+ - Contrary to the Quinn QUIC stack where one can add a congestion controller outside of the source repo, it is not possible to do so with Quiche. Therefore, a noop congestion controller has been added to our [fork](https://github.com/deepspaceip/quiche). Note that there is a [PR against Quiche for a noop congestion controller](https://github.com/cloudflare/quiche/pull/2102) but it has not been merged yet.
 - `cd quiche`
 
 
