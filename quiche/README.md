@@ -2,8 +2,12 @@
 
 # Installation
 - [install Rust](https://rustup.rs/)
-- `git clone https://github.com/cloudflare/quiche`
+
+Contrary to the Quinn QUIC stack where we can add a congestion controller outside of the source repo, it is not possible to do so with Quiche. Therefore, a fork was done and the congestion controller was added.
+
+- `git clone https://github.com/deepspaceip/quiche`
 - `cd quiche`
+
 
 # Key Considerations
 For deep space simulation, with long delays and intermittence, the QUIC stacks default configuration is not suitable. Therefore, the connection must be configured accordingly. 
