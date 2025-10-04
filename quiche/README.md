@@ -2,23 +2,21 @@
 
 # Installation
 - [install Rust](https://rustup.rs/)
-
-Contrary to the Quinn QUIC stack where we can add a congestion controller outside of the source repo, it is not possible to do so with Quiche. Therefore, a fork was done and the congestion controller was added.
-
 - `git clone https://github.com/deepspaceip/quiche`
+ - Contrary to the Quinn QUIC stack where one can add a congestion controller outside of the source repo, it is not possible to do so with Quiche. Therefore, a noop congestion controller has been added to our [fork](https://github.com/deepspaceip/quiche). Note that there is a [PR against Quiche for a noop congestion controller](https://github.com/cloudflare/quiche/pull/2102/files/74b999eb1f3972b9e589e9c5a0a07c74ef854386..799f25e6a0e4720c9b6ba7b1766dea10dd3dfe5d) but it has not been merged yet.
 - `cd quiche`
 
 
 # Key Considerations
 For deep space simulation, with long delays and intermittence, the QUIC stacks default configuration is not suitable. Therefore, the connection must be configured accordingly. 
 
-As discussed in [draft-many-tiptop-quic-profile](), calculate the expected maximum RTT value of the connection, based on the delays and intermittence, and set the initial-rtt and idle-timeout to that value. Also set the congestion controller to a noop. 
+As discussed in [draft-many-tiptop-quic-profile](), calculate the expected maximum RTT value of the connection over its lifetime, based on the delays and intermittence, and set the initial-rtt and idle-timeout to that value. Also set the congestion controller to a noop. 
 
 The relevant Quiche options to set the proper transport configuration are:
 
 - `initial-rtt` (unit: ms)
 - `idle-timeout` (unit: ms)
-- `cc-algorithm congestion_window_unchecked`
+- `cc-algorithm noop`
 
 We found that for interoperability with the Quinn stack, the following parameters were required for the Quiche client:
 `--wire-version 1 --http-version 'HTTP/0.9' --dgram-proto none`
@@ -30,10 +28,10 @@ The following example is for a max rtt is 3600 seconds (1h) and a Quinn server w
 cargo run --release --bin quiche-client -- \
 --no-verify --idle-timeout 3600000 --initial-rtt 3600000 \
 --wire-version 1 --http-version HTTP/0.9 \
---dgram-proto none --cc-algorithm congestion_window_unchecked URL
+--dgram-proto none --cc-algorithm noop URL
 ```
 - `no-verify` is to not verify the server certificate, useful when the server is using a self-signed certificate
-- replace `URL` by the URL of the quic server
+- replace `URL` by the URL of the quic server. Example: `https://127.0.0.1:4433`.
  
 # Quiche as HTTP Server over QUIC
 The following example is for a max rtt of 3600 seconds (1h).
@@ -41,10 +39,10 @@ The following example is for a max rtt of 3600 seconds (1h).
 ```bash
 cargo run --release  --bin quiche-server -- \
 --idle-timeout 3600000 --initial-rtt 3600000 \
---cc-algorithm congestion_window_unchecked 
+--cc-algorithm noop
 --listen 0.0.0.0:4433 --root DIR
 ```
-- replace `DIR` by the directory where html pages are located
+- replace `DIR` by the directory where html pages are located. Example: `./`
 - use `--listen` to specify address and port to bind the server to.
 
 # Get help on arguments
