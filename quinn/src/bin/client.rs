@@ -76,8 +76,8 @@ struct Opt {
     #[clap(long = "cc")]
     cc: Option<String>,
 
-    /// if set, do not check the TLS cert from the server
-    #[clap(long = "notlsverify", default_value = "false")]
+    /// do not check the TLS cert from the server
+    #[clap(long = "no-verify", default_value = "false")]
     notlsverify: bool,
 
     /// repeat x time the same http request within the same connection
@@ -296,7 +296,7 @@ fn strip_ipv6_brackets(host: &str) -> &str {
     }
 }
 
-// copied from insecure_connection.rs. no it is not the right way to do this, but for now, fast enabling testing.
+// copied from insecure_connection.rs. not the right way to do this, but for now
 //
 // Dummy certificate verifier that treats any certificate as valid.
 /// NOTE, such verification is vulnerable to MITM attacks, but convenient for testing.
