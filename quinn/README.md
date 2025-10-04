@@ -3,7 +3,7 @@
 # Installation
 - [install Rust](https://rustup.rs/)
 - `git clone https://github.com/deepspaceip/dipt-http`
-- `cd dipt-http`
+- `cd dipt-http/quinn`
 
 # Key Considerations
 For deep space simulation, with long delays and intermittence, the QUIC stacks default configuration is not suitable. Therefore, the connection must be configured accordingly. 
