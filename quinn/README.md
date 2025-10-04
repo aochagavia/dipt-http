@@ -20,14 +20,14 @@ The relevant options to set the proper transport configuration are:
 
 
 # Quinn as HTTP Client over QUIC
-The following example is for a max rtt is 3600 seconds (1h) and a Quinn server with a self-signed certificate
+The following example is an HTTP request with a max rtt is 3600 seconds (1h) and a QUIC server with a self-signed certificate.
 
 ```bash
 cargo run --release --bin client -- \
 --no-verify --maxrtt 3600000 --cc noop URL
 ```
 - `no-verify` is to not verify the server certificate, useful when the server is using a self-signed certificate
-- `maxrtt` sets the initial-rtt and idle-timeout to the proper value
+- `maxrtt` sets the initial-rtt and idle-timeout parameters
 - replace `URL` by the URL of the quic server (ex: `https://127.0.0.1:4433`)
  
 # Quinn as HTTP Server over QUIC
@@ -35,7 +35,7 @@ The following example is for a max rtt of 3600 seconds (1h).
 
 ```bash
 cargo run --release --bin server -- \
---maxrtt 3600000 --listen 0.0.0.0:4433 DIR
+--maxrtt 3600000 --cc noop --listen 0.0.0.0:4433 DIR
 ```
 - replace `DIR` by the directory where html pages are located
 - use `--listen` to specify address and port to bind the server to.

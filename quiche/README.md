@@ -22,7 +22,7 @@ We found that for interoperability with the Quinn stack, the following parameter
 `--wire-version 1 --http-version 'HTTP/0.9' --dgram-proto none`
 
 # Quiche as HTTP Client over QUIC
-The following example is for a max rtt is 3600 seconds (1h) and a Quinn server with a self-signed certificate
+The following example is an HTTP request with a max rtt is 3600 seconds (1h) and a Quinn server with a self-signed certificate
 
 ```bash
 cargo run --release --bin quiche-client -- \
@@ -49,3 +49,6 @@ cargo run --release  --bin quiche-server -- \
 
 - `cargo run --release --bin quiche-client -- --help`
 - `cargo run --release --bin quiche-server -- --help`
+
+## On execution
+- add `RUST_LOG=info` in front of the cargo command to get more details on the console
