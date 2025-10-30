@@ -3,7 +3,6 @@
 use std::any::Any;
 use std::sync::Arc;
 use std::time::{Instant};
-use chrono::Utc;
 use quinn_proto::congestion::{Controller, ControllerFactory};
 use quinn_proto::RttEstimator;
 
@@ -35,9 +34,9 @@ impl Controller for NoopCC {
         _app_limited: bool,
         _rtt: &RttEstimator,
     ) {
-        let rtt = _rtt;
-        eprintln!("clock: {:?}; rtt: min: {:?}, current: {:?}, conservative: {:?}",
-                  Utc::now(), rtt.min(), rtt.get(), rtt.conservative());
+        //let rtt = _rtt;
+        //eprintln!("clock: {:?}; rtt: min: {:?}, current: {:?}, conservative: {:?}",
+        //          Utc::now(), rtt.min(), rtt.get(), rtt.conservative());
     }
 
     fn on_congestion_event(
