@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-quinn = { version = "0.11", features = ["rustls"] }
-quinn-proto = "0.11"
+quinn = { git = "https://github.com/quinn-rs/quinn.git", rev = "fc2cb26b4eb8f3ec27e9d1180a370a9044b9f611", features = ["rustls"] }
+quinn-proto = { git = "https://github.com/quinn-rs/quinn.git", rev = "fc2cb26b4eb8f3ec27e9d1180a370a9044b9f611", features = ["rustls"] }
 tokio = { version = "1", features = ["full"] }
 anyhow = "1"
 tracing = "0.1"

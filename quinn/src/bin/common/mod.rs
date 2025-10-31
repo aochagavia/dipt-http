@@ -1,5 +1,6 @@
 //! Commonly used code in most examples.
 
+pub mod rate_limit_based_cc;
 pub mod noop_cc;
 
 use quinn::{ClientConfig, Endpoint, ServerConfig};
@@ -79,6 +80,7 @@ use std::time::Duration;
 use quinn_proto::{AckFrequencyConfig, IdleTimeout, MtuDiscoveryConfig};
 use quinn_proto::congestion::{BbrConfig, CubicConfig};
 use crate::common::noop_cc::NoopCCConfig;
+use crate::common::rate_limit_based_cc::RateLimitBasedCCConfig;
 
 // sets transport to max out config parameters
 pub fn set_maxout(transport_config: &mut TransportConfig) {
@@ -130,5 +132,8 @@ pub fn set_cc(transport_config: &mut TransportConfig, cc: String, ccwin: Option<
         transport_config.congestion_controller_factory(Arc::new(cubic_config));
     } else if cc == "noop" {
         transport_config.congestion_controller_factory(Arc::new(NoopCCConfig::default()));
+    } else if cc == "rate-limit" {
+        transport_config.max_bytes_per_second(Some(1_000 * 1_000 * 25 / 8)); // 25 Mbps
+        transport_config.congestion_controller_factory(Arc::new(RateLimitBasedCCConfig));
     }
 }
